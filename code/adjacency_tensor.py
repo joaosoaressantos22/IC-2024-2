@@ -3,43 +3,68 @@ from matplotlib import pyplot as plt
 from itertools import permutations, product, combinations_with_replacement
 import numpy as np
 
-def calculate_m(vetores):
-    max = 0
-    for n in vetores:
-        if (len(n) > max):
-            max = len(n)
-    return max
+
+def calculate_m(vetores): #Funcionando
+    maiorLength = max([len(vetores[i]) for i in range(len(vetores))])
+    return maiorLength
+
+def unique_permutations(lst): #Só garante que a lista nao vai ter elementos repetidos, exemplo [1,1] e [1,1]
+
+    perm_set = set(permutations(lst))
+
+    return [list(p) for p in perm_set]
+
+def calculo_pesos(alfas, vetores): #Funcionando
+    pesos = [0]*len(vetores)
+    l = 0
+    for i in range (len(vetores)):
+        pesos[l] = (len(vetores[i])/alfas[i])
+        l+= 1
+    return pesos
+
 
 def calculate_alpha(vetores, m):
-    print(m)
+
     pos = 0
-    values = [None]*len(vetores)
+
+    values = [0]*len(vetores)
+
     for n in vetores:
+
         if (m == len(n)):
-            values[pos] = len(list(permutations(n))) 
-            print_permutations(list(permutations(n))) 
+
+            values[pos] = len(list(unique_permutations(n))) 
+
         else:
-            newArray = n
-            for j in range((m - len(n))):
-                newArray = np.append(newArray, newArray[j])
-            #print(len(list(permutations(newArray))))
-            values[pos] = len(list(permutations(newArray)))
-            print_permutations(list(permutations(newArray))) 
-            print("SAIU! {}\n")
-            print(values[pos])
+
+            for l in range (len(n)):
+                
+                newArray = n.copy()
+
+                for j in range((m - len(n))):
+                    
+                    newArray.append(newArray[l]) #Bugs aqui!
+
+                print_permutations(unique_permutations(newArray))
+
+                values[pos] += len(list(unique_permutations(newArray)))
+
         pos+= 1
+
     return values
-
-
-def calculate_permutations(*lista, m):
-    values = [None]*m
     
-def print_permutations(p):
+def print_permutations(p): #Funcao de teste somente
     for i in list(p):
         print(i)
 
-v1 = np.array([1,2, 7])
-v4 = np.array([3, 6, 5, 4])
+v1 = [7, 2, 3]
+
+v4 = [3, 6, 5, 4]
+
 vetores = [v1, v4]
+
 m = calculate_m(vetores)
+
 alfas = calculate_alpha(vetores, m)
+
+pesos = calculo_pesos(alfas, vetores)
