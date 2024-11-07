@@ -23,7 +23,7 @@ def calculo_pesos(alfas, vetores): #Funcionando
     return pesos
 
 
-def calculate_alpha(vetores, m):
+def calculate_alpha(vetores, m): #Adiciono posteriormente o retorno da lista das permutações dos termos
 
     pos = 0
 
@@ -34,20 +34,21 @@ def calculate_alpha(vetores, m):
         if (m == len(n)):
 
             values[pos] = len(list(unique_permutations(n))) 
+            #print_permutations(unique_permutations(n))
 
-        else:
+        else: 
 
-            for l in range (len(n)):
+            count = m - len(n) #Quanto que um termo tem que se repetir 
+
+            for elementos_adicionados in combinations_with_replacement(n, count): # Gera todas as permutacoes dos elementos com repeticao de n - count elementos
                 
-                newArray = n.copy()
-
-                for j in range((m - len(n))):
-                    
-                    newArray.append(newArray[l]) #Bugs aqui!
-
-                print_permutations(unique_permutations(newArray))
-
+                newArray = n + list(elementos_adicionados)
+                
                 values[pos] += len(list(unique_permutations(newArray)))
+                
+                perm = unique_permutations(newArray) 
+                
+                #print_permutations(perm)
 
         pos+= 1
 
@@ -57,14 +58,16 @@ def print_permutations(p): #Funcao de teste somente
     for i in list(p):
         print(i)
 
-v1 = [7, 2, 3]
+v1 = [1,2,5,7]
+v2 = [5, 3]
+v3 = [4, 3, 6]
 
-v4 = [3, 6, 5, 4]
-
-vetores = [v1, v4]
+vetores = [v1,v2, v3]
 
 m = calculate_m(vetores)
 
 alfas = calculate_alpha(vetores, m)
 
 pesos = calculo_pesos(alfas, vetores)
+
+print(pesos)
