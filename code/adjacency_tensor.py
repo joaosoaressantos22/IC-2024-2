@@ -8,7 +8,7 @@ class Hypergraph:
         self.cardinalidade_maxima = calculate_m(vetores)
         self.aplhas, self.permutacoes = calculate_alpha(vetores, self.cardinalidade_maxima)
         self.lista_de_pesos = calculo_pesos(self.aplhas, vetores)
-        self.matriz_esparsa = matriz_esparsa(self.permutacoes, self.lista_de_pesos, self.cardinalidade_maxima)
+        self.matriz_esparsa = matriz_esparsa(self.permutacoes, self.lista_de_pesos, self.aplhas)
         # self
         
     def printa_pesos(self):
