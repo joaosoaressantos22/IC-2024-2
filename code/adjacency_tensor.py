@@ -1,4 +1,4 @@
-from auxiliare_functions import calculate_m, calculate_alpha, calculo_pesos, print_permutations
+from auxiliare_functions import calculate_m, calculate_alpha, calculo_pesos, print_permutations, matriz_esparsa
 
 class Hypergraph:
     
@@ -6,8 +6,9 @@ class Hypergraph:
         
         self.lista_de_hiperarestas = vetores 
         self.cardinalidade_maxima = calculate_m(vetores)
-        self.lista_de_pesos = calculo_pesos(calculate_alpha(vetores, self.cardinalidade_maxima), vetores)
-        # self.tensor_adjacencia()
+        self.aplhas, self.permutacoes = calculate_alpha(vetores, self.cardinalidade_maxima)
+        self.lista_de_pesos = calculo_pesos(self.aplhas, vetores)
+        self.matriz_esparsa = matriz_esparsa(self.permutacoes, self.lista_de_pesos, self.cardinalidade_maxima)
         # self
         
     def printa_pesos(self):

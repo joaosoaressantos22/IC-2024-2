@@ -1,16 +1,16 @@
 from itertools import permutations, product, combinations_with_replacement
-from math import factorial
 
 def calculate_m(vetores): #Funcionando
     maiorLength = max([len(vetores[i]) for i in range(len(vetores))])
     return maiorLength
 
-def unique_permutations(lst):
+def unique_permutations(lst): #Só garante que a lista nao vai ter elementos repetidos, exemplo [1,1] e [1,1]
 
-    return tuple(set(permutations(lst)))
+    perm_set = set(permutations(lst))
+
+    return [list(p) for p in perm_set]
 
 def calculo_pesos(alfas, vetores): #Funcionando
-
     pesos = [0]*len(vetores)
     l = 0
     for i in range (len(vetores)):
@@ -25,16 +25,18 @@ def calculate_alpha(vetores, m): #Adiciono posteriormente o retorno da lista das
 
     values = [0]*len(vetores)
     
-    lista_de_permutacoes = []
-
     permutacoes = ()
 
     for n in vetores:
 
+        lista_permutacoes = list(permutacoes)
+
         if (m == len(n)):
 
             values[pos] = len(list(unique_permutations(n))) 
-            lista_de_permutacoes.append(unique_permutations(n))
+            #print_permutations(unique_permutations(n))
+            lista_permutacoes.append(unique_permutations(n))
+
 
         else: 
             count = m - len(n) #Quanto que um termo tem que se repetir 
@@ -42,27 +44,19 @@ def calculate_alpha(vetores, m): #Adiciono posteriormente o retorno da lista das
             for elementos_adicionados in combinations_with_replacement(n, count): # Gera todas as permutacoes dos elementos com repeticao de n - count elementos
                 
                 newArray = n + list(elementos_adicionados)
-                values[pos] += len(list(unique_permutations(newArray)))
-                lista_de_permutacoes.append(unique_permutations(newArray))
 
+                #print("\n")
+                values[pos] += len(list(unique_permutations(newArray)))
+                lista_permutacoes.append(unique_permutations(newArray))
+                perm = unique_permutations(newArray) 
+
+        permutacoes = tuple(lista_permutacoes)  
         pos+= 1
 
-    return values, tuple(lista_de_permutacoes)
-
-def matriz_esparsa(tuplas_permutadas, pesos, cardinalidade_maxima):
-
-    matriz_esparsa = {}
-
-    for j, item in enumerate(tuplas_permutadas):
-        
-        for i in range(len(tuplas_permutadas)):
-
-            if (len(item) == factorial(cardinalidade_maxima)):
-                print(f"O item {item[i]} é M\n")
-                matriz_esparsa[item[i]] = pesos[j]
+    print("Essa é a brincadeira")
+    print(permutacoes)
+    return values
     
-    print(matriz_esparsa)
-
 def print_permutations(p): #Funcao de teste somente
     
     print("[", end="")
