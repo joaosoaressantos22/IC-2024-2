@@ -49,19 +49,31 @@ def calculate_alpha(vetores, m): #Adiciono posteriormente o retorno da lista das
 
     return values, tuple(lista_de_permutacoes)
 
-def matriz_esparsa(tuplas_permutadas, pesos, cardinalidade_maxima):
+def matriz_esparsa(tuplas_permutadas, pesos, alfas):
+  
+  # print(tuplas_permutadas)
+  
+  matriz_esparsa = {}
+  
+  j = 0
+  
+  combinacoes_atuais = 0
+  
+  for item in tuplas_permutadas:
+  
+    combinacoes_atuais += len(item) #UM ITEM MENOR QUE TEM QUE IR SOMANDO ATÉ BATER O NEGOCIO
 
-    matriz_esparsa = {}
-
-    for j, item in enumerate(tuplas_permutadas):
-        
-        for i in range(len(tuplas_permutadas)):
-
-            if (len(item) == factorial(cardinalidade_maxima)):
-                print(f"O item {item[i]} é M\n")
-                matriz_esparsa[item[i]] = pesos[j]
-    
-    print(matriz_esparsa)
+    for tupla in item:
+  
+      matriz_esparsa[tupla] = "{:.5f}".format(pesos[j])
+  
+    if combinacoes_atuais == alfas[j]:
+      
+      j += 1
+  
+      combinacoes_atuais = 0
+  
+  return matriz_esparsa
 
 def print_permutations(p): #Funcao de teste somente
     
