@@ -1,4 +1,5 @@
 from itertools import permutations, product, combinations_with_replacement
+from collections import Counter
 from math import factorial
 
 def calculate_m(vetores): #Funcionando
@@ -49,10 +50,8 @@ def calculate_alpha(vetores, m): #Adiciono posteriormente o retorno da lista das
 
     return values, tuple(lista_de_permutacoes)
 
-def matriz_esparsa(tuplas_permutadas, pesos, alfas):
-  
-  # print(tuplas_permutadas)
-  
+def tensor_de_adjacencia(tuplas_permutadas, pesos, alfas):
+    
   matriz_esparsa = {}
   
   j = 0
@@ -73,8 +72,41 @@ def matriz_esparsa(tuplas_permutadas, pesos, alfas):
   
       combinacoes_atuais = 0
   
+  matriz_esparsa = {k: float(v) for k, v in matriz_esparsa.items()} 
+  
   return matriz_esparsa
 
+def tensor_de_grau(vetores, cardinalidade_maxima):
+    
+    dictionary = dict(Counter(x for xs in vetores for x in set(xs)))
+    
+    real_dict = {}
+    
+    for x in dictionary:
+        string_to_change = (str(x)*cardinalidade_maxima)
+        real_dict[tuple(int(digit) for digit in string_to_change)] = dictionary[x]
+        
+    return dict(sorted(real_dict.items()))
+    
+def tensor_laplaciano(tensor_de_grau, tensor_de_adjacencia):
+
+    diff_dict = {}
+    #2 - 1
+    for key, value in tensor_de_adjacencia.items():
+        if key in tensor_de_grau:
+
+            diff_dict[key] = tensor_de_grau[key] - value
+        else:
+
+            diff_dict[key] = -value
+
+    for key, value in tensor_de_grau.items():
+        if key not in tensor_de_adjacencia:
+
+            diff_dict[key] = value
+
+    return diff_dict 
+    
 def print_permutations(p): #Funcao de teste somente
     
     print("[", end="")
