@@ -74,7 +74,7 @@ def tensor_de_adjacencia(tuplas_permutadas, pesos, alfas):
   
   matriz_esparsa = {k: float(v) for k, v in matriz_esparsa.items()} 
   
-  return matriz_esparsa
+  return dict(sorted(matriz_esparsa.items()))
 
 def tensor_de_grau(vetores, cardinalidade_maxima):
     
@@ -91,7 +91,7 @@ def tensor_de_grau(vetores, cardinalidade_maxima):
 def tensor_laplaciano(tensor_de_grau, tensor_de_adjacencia):
 
     diff_dict = {}
-    #2 - 1
+
     for key, value in tensor_de_adjacencia.items():
         if key in tensor_de_grau:
 
@@ -105,7 +105,7 @@ def tensor_laplaciano(tensor_de_grau, tensor_de_adjacencia):
 
             diff_dict[key] = value
 
-    return diff_dict 
+    return dict(sorted(diff_dict.items())) 
     
 def print_permutations(p): #Funcao de teste somente
     

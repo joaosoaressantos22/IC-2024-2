@@ -20,5 +20,44 @@ class Hypergraph:
     
     def retorna_tensor_laplaciano(self):
         return self.tensor_laplaciano
+
+    @staticmethod
+    def to_array(tensor):
+        
+        #Funcionando para 3 dimensões
+        #TODO DEIXAR PARA QUALQUER DIMENSÃO 
+        #TODO DEIXAR O ARRAY NÃO ESPARSO
+
+        tensor_to_array = [] #Tensor vazio
+
+        _ = (list(tensor.keys()))
+        if len(_[0]) > 3:
+            return None
+        lista_de_chaves = [x[0] for x in _]
+
+        lista_de_chaves = list(dict.fromkeys(lista_de_chaves))
+        
+        i = 0
+        
+        lista_para_adicionar = []
+
+        for tupla in tensor:
+
+            if tupla[0] == lista_de_chaves[i]:
+                
+                lista_para_adicionar.append(tensor[tupla])
+            
+            else:
+                
+                tensor_to_array.append(lista_para_adicionar)
+                lista_para_adicionar = []
+                lista_para_adicionar.append(tensor[tupla])
+
+                i += 1
+
+        tensor_to_array.append(lista_para_adicionar)
+            
+        return tensor_to_array
+        
     def retorna_plot_hipergrafo(self):
         return None
