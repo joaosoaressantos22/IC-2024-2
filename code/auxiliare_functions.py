@@ -107,6 +107,12 @@ def tensor_laplaciano(tensor_de_grau, tensor_de_adjacencia):
 
     return dict(sorted(diff_dict.items())) 
     
+def calculate_quantidade_vertices(vetores):
+    total = 0
+    for ele in range(0, len(vetores)):  # let's not use "ele" as a var name, btw. confusing
+        total = total + vetores[ele]   
+    return total
+
 def print_permutations(p): #Funcao de teste somente
     
     print("[", end="")

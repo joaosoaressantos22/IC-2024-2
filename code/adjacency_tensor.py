@@ -1,4 +1,5 @@
 from auxiliare_functions import calculate_m, calculate_alpha, calculo_pesos, print_permutations, tensor_de_adjacencia, tensor_de_grau, tensor_laplaciano
+import numpy as np 
 
 class Hypergraph:
     
@@ -11,7 +12,8 @@ class Hypergraph:
         self.tensor_de_adjacencia = tensor_de_adjacencia(self.permutacoes, self.lista_de_pesos, self.aplhas)
         self.tensor_de_grau = tensor_de_grau(self.lista_de_hiperarestas, self.cardinalidade_maxima)
         self.tensor_laplaciano = tensor_laplaciano(self.tensor_de_grau, self.tensor_de_adjacencia)
-        
+        self.tensor_laplaciano_array = self.to_array()
+
     def printa_pesos(self):
         print_permutations(self.lista_de_pesos)
         
@@ -20,44 +22,29 @@ class Hypergraph:
     
     def retorna_tensor_laplaciano(self):
         return self.tensor_laplaciano
+    
+    def to_array(self):
 
-    @staticmethod
-    def to_array(tensor):
-        
-        #Funcionando para 3 dimensões
-        #TODO DEIXAR PARA QUALQUER DIMENSÃO 
-        #TODO DEIXAR O ARRAY NÃO ESPARSO
-
-        tensor_to_array = [] #Tensor vazio
-
-        _ = (list(tensor.keys()))
-        if len(_[0]) > 3:
-            return None
+        _ = (list(self.tensor_laplaciano.keys()))
         lista_de_chaves = [x[0] for x in _]
+        tupla_para_array = tuple([lista_de_chaves[-1]] * self.cardinalidade_maxima)
+        to_array = (np.zeros(tupla_para_array)) 
+        for key in self.tensor_laplaciano.keys():
+            key_check = tuple(x - 1 for x in key)
+            to_array[key_check] = self.tensor_laplaciano[key]
 
-        lista_de_chaves = list(dict.fromkeys(lista_de_chaves))
-        
-        i = 0
-        
-        lista_para_adicionar = []
-
-        for tupla in tensor:
-
-            if tupla[0] == lista_de_chaves[i]:
-                
-                lista_para_adicionar.append(tensor[tupla])
-            
-            else:
-                
-                tensor_to_array.append(lista_para_adicionar)
-                lista_para_adicionar = []
-                lista_para_adicionar.append(tensor[tupla])
-
-                i += 1
-
-        tensor_to_array.append(lista_para_adicionar)
-            
-        return tensor_to_array
-        
+        return to_array
+    #TODO CONSERTAR ESSA FUNCAO 
+    def primeira_fatia_frontal_laplace(self):
+        _ = (list(self.tensor_laplaciano.keys()))
+        lista_de_chaves = [x[0] for x in _]
+        fatia_frontal = np.zeros(tuple([lista_de_chaves[-1]] * 2))  
+        for key in self.tensor_laplaciano.keys():
+            key_check = tuple(x - 1 for x in key)
+            if key[-1] == 6:
+                fatia_frontal[key_check[2:]] += self.tensor_laplaciano[key]
+        return fatia_frontal     
+    
     def retorna_plot_hipergrafo(self):
         return None
+    
