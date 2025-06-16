@@ -26,24 +26,42 @@ class Hypergraph:
     def to_array(self):
 
         _ = (list(self.tensor_laplaciano.keys()))
+
         lista_de_chaves = [x[0] for x in _]
+
         tupla_para_array = tuple([lista_de_chaves[-1]] * self.cardinalidade_maxima)
+
         to_array = (np.zeros(tupla_para_array)) 
+
         for key in self.tensor_laplaciano.keys():
+
             key_check = tuple(x - 1 for x in key)
             to_array[key_check] = self.tensor_laplaciano[key]
 
         return to_array
+    
     #TODO CONSERTAR ESSA FUNCAO 
+    
     def primeira_fatia_frontal_laplace(self):
-        _ = (list(self.tensor_laplaciano.keys()))
-        lista_de_chaves = [x[0] for x in _]
-        fatia_frontal = np.zeros(tuple([lista_de_chaves[-1]] * 2))  
-        for key in self.tensor_laplaciano.keys():
-            key_check = tuple(x - 1 for x in key)
-            if key[-1] == 6:
-                fatia_frontal[key_check[2:]] += self.tensor_laplaciano[key]
-        return fatia_frontal     
+        print(self.tensor_laplaciano)
+        keys = list(self.tensor_laplaciano.keys())
+
+        total_len = (keys[-1][-1]) + 1
+        nesima_fatia = np.zeros((total_len, total_len))
+        key_atual = 0
+
+        while key_atual <= (total_len + 1):
+
+            for key in keys:
+
+                if key[-1] == key_atual:
+
+                    nesima_fatia[key_atual, key_atual] += self.tensor_laplaciano[key]
+
+            key_atual += 1
+
+        return nesima_fatia
+
     
     def retorna_plot_hipergrafo(self):
         return None
