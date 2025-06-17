@@ -3,8 +3,8 @@ import numpy as np
 
 def main():
     np.set_printoptions(suppress=True)
-    h = Hypergraph([[3, 4], [5, 6, 7],  [0, 1, 2]]) #Definiçao do hipergrafo 
-    print(f"N_ESIMA_FATIA = {h.primeira_fatia_frontal_laplace()}\nTO_ARRAY = {h.to_array()}")
-
+    h = Hypergraph() #Definiçao do hipergrafo 
+    print(f"N_ESIMA_FATIA1 = \n{h.primeira_fatia_frontal_laplaciana}\n")
+    h.retorna_plot_hipergrafo()
 if __name__ == "__main__":
     main()

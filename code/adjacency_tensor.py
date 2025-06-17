@@ -1,18 +1,23 @@
 from auxiliare_functions import calculate_m, calculate_alpha, calculo_pesos, print_permutations, tensor_de_adjacencia, tensor_de_grau, tensor_laplaciano
 import numpy as np 
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt 
 
 class Hypergraph:
     
-    def __init__(self, vetores):
+    def __init__(self, hypergraphs=[[3, 4], [5],  [0, 1, 2]]):
         
-        self.lista_de_hiperarestas = vetores 
-        self.cardinalidade_maxima = calculate_m(vetores)
-        self.aplhas, self.permutacoes = calculate_alpha(vetores, self.cardinalidade_maxima)
-        self.lista_de_pesos = calculo_pesos(self.aplhas, vetores)
+        self.lista_de_hiperarestas = hypergraphs 
+        self.cardinalidade_maxima = calculate_m(hypergraphs)
+        self.aplhas, self.permutacoes = calculate_alpha(hypergraphs, self.cardinalidade_maxima)
+        self.lista_de_pesos = calculo_pesos(self.aplhas, hypergraphs)
         self.tensor_de_adjacencia = tensor_de_adjacencia(self.permutacoes, self.lista_de_pesos, self.aplhas)
         self.tensor_de_grau = tensor_de_grau(self.lista_de_hiperarestas, self.cardinalidade_maxima)
         self.tensor_laplaciano = tensor_laplaciano(self.tensor_de_grau, self.tensor_de_adjacencia)
         self.tensor_laplaciano_array = self.to_array()
+        self.primeira_fatia_frontal_laplaciana = self.primeira_fatia_frontal_laplace()
+        self.auto_vetores_fatia_frontal = (np.linalg.eigh(self.primeira_fatia_frontal_laplaciana)[-1])
+        self.auto_valores_fatia_frontal = (np.linalg.eigh(self.primeira_fatia_frontal_laplaciana)[0])
 
     def printa_pesos(self):
         print_permutations(self.lista_de_pesos)
@@ -40,29 +45,34 @@ class Hypergraph:
 
         return to_array
     
-    #TODO CONSERTAR ESSA FUNCAO 
-    
     def primeira_fatia_frontal_laplace(self):
-        print(self.tensor_laplaciano)
+
         keys = list(self.tensor_laplaciano.keys())
-
+    
         total_len = (keys[-1][-1]) + 1
+    
         nesima_fatia = np.zeros((total_len, total_len))
-        key_atual = 0
 
-        while key_atual <= (total_len + 1):
-
-            for key in keys:
-
-                if key[-1] == key_atual:
-
-                    nesima_fatia[key_atual, key_atual] += self.tensor_laplaciano[key]
-
-            key_atual += 1
-
+        for key in keys:
+            
+            nesima_fatia[key[0], key[1]] += self.tensor_laplaciano[key]
         return nesima_fatia
+    
 
-    
-    def retorna_plot_hipergrafo(self):
-        return None
-    
+    #TODO ENTENDER MELHOR ESSA FUNCAO, FAZER ALGUMAS ALTERACOES FUTURAS 
+    def retorna_plot_hipergrafo(self, clusters=3):
+        
+        keys = list(self.tensor_laplaciano.keys())
+        
+        total_len = (keys[-1][-1]) + 1
+        inertias = [] 
+        for i in range(1, total_len):
+            kmeans = KMeans(n_clusters=i)
+            kmeans.fit(self.auto_vetores_fatia_frontal)
+            inertias.append(kmeans.inertia_)
+        
+        plt.plot(range(1, total_len), inertias, marker='o')
+        plt.title('Elbow method')
+        plt.xlabel('Number of clusters')
+        plt.ylabel('Inertia')
+        plt.show() 
