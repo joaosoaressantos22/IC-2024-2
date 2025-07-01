@@ -79,12 +79,12 @@ def tensor_de_adjacencia(tuplas_permutadas, pesos, alfas):
 def tensor_de_grau(vetores, cardinalidade_maxima):
     
     dictionary = dict(Counter(x for xs in vetores for x in set(xs)))
-    
     real_dict = {}
     
     for x in dictionary:
-        string_to_change = (str(x)*cardinalidade_maxima)
-        real_dict[tuple(int(digit) for digit in string_to_change)] = dictionary[x]
+
+        repeated_tuple = (x,) * cardinalidade_maxima
+        real_dict[repeated_tuple] = dictionary[x]
         
     return dict(sorted(real_dict.items()))
     
