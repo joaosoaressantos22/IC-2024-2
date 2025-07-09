@@ -113,6 +113,15 @@ def calculate_quantidade_vertices(vetores):
         total = total + vetores[ele]   
     return total
 
+def lista_traduzida(hypergraphs):
+    vertices_unicos = sorted(set(v for edge in hypergraphs for v in edge))
+    
+    mapeamento = {v: i for i, v in enumerate(vertices_unicos)}
+    
+    hypergraphs_renumerado = [[mapeamento[v] for v in edge] for edge in hypergraphs]
+    
+    return hypergraphs_renumerado
+
 def print_permutations(p): #Funcao de teste somente
     
     print("[", end="")
