@@ -26,21 +26,47 @@ class Hypergraph:
 
     def tensor_laplace_to_array(self):
 
-        _ = (list(self.tensor_laplaciano.keys()))
+        keys = list(self.tensor_laplaciano.keys())
 
-        lista_de_chaves = [x[0] for x in _]
+        n_max = max(max(key) for key in keys)
 
-        tupla_para_array = tuple([lista_de_chaves[-1]] * self.cardinalidade_maxima)
+        dimensao = tuple([n_max + 1] * self.cardinalidade_maxima)
+        to_array = np.zeros(dimensao)
 
-        to_array = (np.zeros(tupla_para_array)) 
-
-        for key in self.tensor_laplaciano.keys():
-
-            key_check = tuple(x - 1 for x in key)
-            to_array[key_check] = self.tensor_laplaciano[key]
+        for key in self.tensor_laplaciano:
+            to_array[key] = self.tensor_laplaciano[key]
 
         return to_array
     
+    def tensor_grau_to_array(self):
+
+        keys = list(self.tensor_de_grau.keys())
+
+        n_max = max(max(key) for key in keys)
+
+        dimensao = tuple([n_max + 1] * self.cardinalidade_maxima)
+        to_array = np.zeros(dimensao)
+
+        for key in self.tensor_de_grau:
+            to_array[key] = self.tensor_de_grau[key]
+
+        return to_array
+    
+    def tensor_adjacencia_to_array(self):
+
+        keys = list(self.tensor_de_adjacencia.keys())
+
+        n_max = max(max(key) for key in keys)
+
+        dimensao = tuple([n_max + 1] * self.cardinalidade_maxima)
+        to_array = np.zeros(dimensao)
+
+        for key in self.tensor_de_adjacencia:
+            to_array[key] = self.tensor_de_adjacencia[key]
+
+        return to_array
+
+
     def primeira_fatia_frontal_laplace(self):
 
         keys = list(self.tensor_laplaciano.keys())
