@@ -10,7 +10,7 @@ class Hypergraph:
         
 
         hypergraphs = lista_traduzida(hypergraphs) #TRADUTOR DA LISTA, PODEM SER STRINGS OU OBJETOS, QUALQUER COISA 
-        self.lista_de_hiperarestas = lista_traduzida(hypergraphs)
+        self.lista_de_hiperarestas = hypergraphs
         self.cardinalidade_maxima = calculate_m(hypergraphs)
         self.aplhas, self.permutacoes = calculate_alpha(hypergraphs, self.cardinalidade_maxima)
         self.lista_de_pesos = calculo_pesos(self.aplhas, hypergraphs)
