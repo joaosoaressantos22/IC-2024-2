@@ -2,6 +2,7 @@ from auxiliare_functions import calculate_m, calculate_alpha, calculo_pesos, pri
 import numpy as np 
 import networkx as nx
 from sklearn.cluster import KMeans
+import tracemalloc
 import matplotlib.pyplot as plt 
 
 class Hypergraph:
@@ -199,3 +200,25 @@ class Hypergraph:
             plt.title(f'Spectral Clustering of Hypergraph (k={clusters})')
             plt.grid(True, alpha=0.3)
             plt.show()
+    
+    @staticmethod
+    def gera_hipergrafo_caminho(n):
+
+
+        #Pega o valor mais proximo acima de n que satisfaz a conducao de hipergrafo de caminho 3! 2n + 3!
+        if (n - 3)%2 != 0:
+            n += 1
+
+        lista_total = []
+        lista_intermediaria = []
+        tam = 3
+        for i in range(n):
+
+            lista_intermediaria.append(i)
+            
+            if (len(lista_intermediaria) == tam):
+                lista_total.append(lista_intermediaria) #Adiciono na lista total
+                lista_intermediaria = []
+                lista_intermediaria.append(i) #Adiciono o elemento na lista para gerar o caminho    
+        
+        return lista_total
